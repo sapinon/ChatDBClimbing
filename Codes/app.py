@@ -232,6 +232,7 @@ elif st.session_state.page == "chatbot":
             schema_text=full_schema
         )
         if recs:
+            st.session_state.chat_history.append(("Recommandations de questions :", "\n* ".join(recs)))
             st.markdown("<div style='background-color:#FF0080;padding:12px 18px;border-radius:10px;color:white;'>💡 Suggestions basées sur votre rôle et vos questions précédentes :</div>", unsafe_allow_html=True)
             for r in recs:
                 st.markdown(f"<p>{r}</p>", unsafe_allow_html=True)
