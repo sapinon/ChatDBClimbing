@@ -6,7 +6,7 @@ import base64
 import pandas as pd
 
 from db import run_sql_query, fetch_metadata
-from utils import get_schema_description
+from utils import get_schema_description, execute_auto_fixing_sql
 from access_control import load_permissions, is_table_allowed
 from history_manager import init_history_db, save_question
 from recommandations import recommend_questions_with_context
@@ -186,7 +186,7 @@ elif st.session_state.page == "chatbot":
                 answer = "⛔ Vous n'avez pas accès aux données nécessaires."
             else:
                 try:
-                    results = run_sql_query(sql_query)
+                    results = execute_auto_fixing_sql(sql_query, full_schema, max_attempts=3)
                     results_str = results.to_string(index=False)
                     answer = generate_natural_response(
                         sql_results=results_str,
@@ -198,6 +198,21 @@ elif st.session_state.page == "chatbot":
                     save_question(conn, st.session_state.role, current_question)
                 except Exception as e:
                     answer = f"❌ Erreur SQL : {e}"
+        elif "### QUESTIONS." in answer:
+            st.session_state.pending_clarification = answer
+            sub = "### QUESTIONS."
+            idx = answer.find(sub)
+            if idx != -1:
+                answer = answer[idx + len(sub):]
+            else:
+                answer = ""
+        elif "### REPONSE." in answer:
+            sub = "### REPONSE."
+            idx = answer.find(sub)
+            if idx != -1:
+                answer = answer[idx + len(sub):]
+            else:
+                answer = ""
 
         st.session_state.chat_history.append((current_question, answer))
         #st.session_state["main_question"] = ""

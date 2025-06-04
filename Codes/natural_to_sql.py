@@ -67,7 +67,11 @@ def generate_sql_from_question(question, schema_info, history=None):
     
     🧠 Structure attendue dans ta réponse :
     A. Raisonnement pas à pas  
-    B. Requête SQL commençant par ```sql
+    
+    B. Une seule des options suivantes : 
+        a. Prioritairement : Une ou plusieurs questions à destination de l'utilisateur pour clarifier sa demande (particulièrement si certains termes sont ambigus ou que certains critères sont trop sujectifs ou imprécis), si tu n'as pas assez d'informations pour générer une requête SQL. Cette section doit alors commencer par "### QUESTIONS."
+        a. Si tous les critères sont clairs et que les données disponibles suffisent à répondre: une requête SQL commençant par ```sql
+        c. Une réponse contextuelle si tu disposes de toutes les informations suffisantes pour répondre. Cette section doit alors être préfixée par "### REPONSE."
     """
 
     response = client.chat.completions.create(

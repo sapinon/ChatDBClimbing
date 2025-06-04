@@ -1,7 +1,69 @@
+import os
+import re
+
 from sqlalchemy import inspect
-from db import engine  # Assurez-vous que le fichier db.py contient bien l'engine
+from db import engine, run_sql_query  # Assurez-vous que le fichier db.py contient bien l'engine
+from openai import OpenAI
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
+def get_completion(prompt, model, temperature=0.1):
+    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+    llm_resp = client.chat.completions.create(
+        model=model,
+        messages=[{"role": "user", "content": prompt_correction}],
+        temperature = temperature
+    ).choices[0].message.content.strip()
+    return llm_resp
+
+def prompt_correction(query, error_msg, full_schema):
+    prompt_correction = f"""
+    La requête SQL suivante a provoqué une erreur lorsqu'on l'a exécutée :
+    ```sql
+    {query}
+    Message d’erreur retourné : « {error_msg} »
+
+    Voici le schéma des tables disponible pour m’assurer que la correction est valide :
+    {full_schema}
+    
+    Merci de proposer une version corrigée de cette requête SQL PostgreSQL, compatible avec les types de données en place. Ne modifie que ce qui est nécessaire pour lever l’erreur, et conserve l’objectif métier (par exemple, calculer la durée moyenne de session en heures). Ta réponse doit contenir uniquement la requête corrigée dans un bloc sql ; pas d’explication superflue.
+    """
+
+    return prompt_correction
 
 
+def execute_auto_fixing_sql(query, full_schema, max_attempts=3):
+    if query:
+        corrected_query = query
+        attempts = 0
+        while attempts < max_attempts:
+            try:
+                results = run_sql_query(corrected_query)
+                return results
+            except Exception as exec_error:
+                attempts += 1
+                error_msg = str(exec_error)
+
+                if attempts >= max_attempts:
+                    final_answer = (
+                        f"❌ Impossible d'exécuter la requête après {max_attempts} tentatives.\n"
+                        f"Dernière requête SQL :\n```sql\n{corrected_query}\n```\n"
+                        f"Message d'erreur : {error_msg}"
+                    )
+                    return final_answer
+                else:
+                    pc = prompt_correction(query, error_msg, full_schema)
+                    llm_resp = get_completion(pc, model="gpt-4.1", temperature=0)
+                    sql_match = re.search(r"```sql\s*([\s\S]+?)```", llm_resp, re.IGNORECASE)
+                    if sql_match:
+                        corrected_query = sql_match.group(1).strip()
+                    else:
+                        # Si le LLM ne renvoie pas de bloc SQL, on abandonne
+                        final_answer = (
+                            "❌ Le modèle n'a pas renvoyé de requête SQL valide en réponse au message d'erreur.\n"
+                            f"Réponse du modèle : {llm_resp}"
+                        )
+                        break
 
 #Va définir le prompt qui explique les data disponibles
 def get_schema_description():
