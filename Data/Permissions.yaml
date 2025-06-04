@@ -1,0 +1,60 @@
+Directeur de l'organisation:
+  allow:
+    - dim_time
+    - dim_gym
+    - fact_visit_trx
+    - fact_rt_clmb_log
+    - dim_rt_catlg
+    - dim_mbs
+    - dim_clmbr_prfl
+
+Manager des salles d'escalade:
+  allow:
+    - dim_time
+    - dim_gym
+    - fact_visit_trx
+    - fact_rt_clmb_log
+    - dim_rt_catlg
+    - dim_mbs
+    - dim_clmbr_prfl
+
+Manager d'une salle:
+  allow:
+    - dim_time
+    - dim_gym
+    - fact_visit_trx
+    - fact_rt_clmb_log
+    - dim_rt_catlg
+    - dim_clmb_prfl
+  deny:
+    - dim_mbs
+
+Ouvreur/Routesetter:
+  allow:
+    - dim_rt_catlg
+    - fact_rt_clmb_log
+  deny:
+    - dim_clmb_prfl
+    - dim_mbs
+    - fact_visit_trx
+
+Responsable marketing des salles:
+  allow:
+    - dim_mbs
+    - dim_clmbr_prfl
+    - dim_time
+    - fact_visit_trx
+  deny:
+    - fact_rt_clmb_log
+    - dim_rt_catlg
+
+Responsable accueil d'une salle:
+  allow:
+    - dim_clmbr_prfl
+    - dim_time
+    - fact_visit_trx
+    - dim_gym
+  deny:
+    - fact_rt_clmb_log
+    - dim_rt_catlg
+    - dim_mbs

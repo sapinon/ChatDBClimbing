@@ -1,0 +1,16 @@
+"Directeur de l'organisation": "En tant que directeur de l'organisation, je veux avoir une vue d'ensemble sur l'activité globale de toutes les salles d'escalade, sans entrer dans les détails. Je m'intéresse aux tendances générales : la fréquentation, les types de profils utilisateurs, les performances globales, etc. Mon utilisation du chatbot visera a repondre a des questions telles que 'Quelle est l'évolution mensuelle de la fréquentation dans l'ensemble des salles ?'; 'Quel est le pourcentage de réussite des ascensions par rapport aux tentatives, au niveau national ?';'Quels sont les profils les plus représentés parmi nos adhérents ?'"
+
+
+"Manager des salles d'escalade": "En tant que responsable de plusieurs salles, je veux analyser les performances de chaque salle, comparer leur fréquentation, les profils des grimpeurs, les taux d’ascension réussie, etc. Mon utilisation du chatbot vise a repondre a des questions telles que 'Quelle salle a eu le plus de visiteurs le mois dernier ?', 'Quelle est la répartition des types de voies (difficulté, style) dans chaque salle ?', 'Quels types de membres fréquentent le plus les salles en région X ?'"
+
+
+"Manager d'une salle": "En tant que manager d’une salle spécifique, je suis intéressé par les détails opérationnels : la fréquentation quotidienne, les pics horaires, les voies les plus utilisées, la réussite des grimpeurs, etc. Mon utilisation du chatbot vise a repondre a des questions telles que 'Combien de visiteurs avons-nous eus la semaine dernière dans ma salle ?'; 'Quelles sont les voies les plus grimpées et leur taux de réussite ?'; 'Quel est le profil des utilisateurs qui fréquentent le plus cette salle (âge, genre, type d’abonnement) ?'"
+
+
+"Ouvreur/Routesetter": "En tant qu’ouvreur, je veux suivre les performances des voies que j’ai créées, leur difficulté perçue, et savoir si elles sont trop faciles ou trop dures pour les grimpeurs. Mon utilisation du chatbot vise a repondre à des questions telles que 'Combien de tentatives ont été faites sur la voie A, et combien ont réussi ?'; 'Quelle est la durée moyenne avant qu'une nouvelle voie soit gravie pour la première fois ?'; 'Quelles voies ont un taux de réussite anormalement bas (ou élevé) ?'"
+
+
+"Responsable marketing des salles": "En tant que responsable marketing, je m’intéresse au comportement des utilisateurs : types d'abonnement, fréquence de visite, préférences, périodes de forte affluence… Ces données m’aident à cibler les campagnes et ajuster les offres. Mon utilisation du chatbot vise à répondre à des questions telles que 'Quels types de membres visitent le plus souvent les salles en soirée ?'; 'Quel est l’impact des réductions sur la fréquentation ?'; 'Quels segments d'utilisateurs sont les moins actifs (et donc à réengager) ?'"
+
+
+"Responsable accueil d'une salle": "En tant que responsable de l’accueil, je dois savoir combien de personnes entrent et sortent, à quels moments, et pouvoir gérer la capacité et le personnel en fonction de l'affluence. Mon utilisation du chatbot vise à répondre à des questions telles que 'Quels sont les créneaux horaires avec le plus d’affluence cette semaine ?'; 'Quelle est la durée moyenne de visite par utilisateur ?'; 'Combien de nouveaux visiteurs avons-nous accueillis aujourd’hui ?'"
