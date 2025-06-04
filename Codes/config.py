@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 # === PostgreSQL ===
-POSTGRES_URI = "postgresql://postgres:Mihaxulo7@localhost:5433/Climbing"
+POSTGRES_URI = "postgresql://postgres:Mihaxulo7@localhost:5432/climbing"
 
 # === FAISS ===
 FAISS_INDEX_PATH = "index/faiss_index"

@@ -7,6 +7,9 @@ HISTORY_DB_PATH = "Data/chat_history.db"
 def init_history_db(db_path=HISTORY_DB_PATH):
     os.makedirs(os.path.dirname(db_path), exist_ok=True)
     conn = sqlite3.connect(db_path)
+
+
+
     cursor = conn.cursor()
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS interaction_history (

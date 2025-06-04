@@ -195,7 +195,7 @@ elif st.session_state.page == "chatbot":
                         history=st.session_state.chat_history,
                         schema_info=full_schema
                     ) if not results.empty else "⚠️ Aucun résultat trouvé pour cette requête."
-                    save_question(st.session_state.chat_history, st.session_state.role, current_question)
+                    save_question(conn, st.session_state.role, current_question)
                 except Exception as e:
                     answer = f"❌ Erreur SQL : {e}"
 
