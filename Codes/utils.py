@@ -7,13 +7,21 @@ from openai import OpenAI
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 def get_completion(prompt, model, temperature=0.1):
-    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+    try:
+        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-    llm_resp = client.chat.completions.create(
-        model=model,
-        messages=[{"role": "user", "content": prompt_correction}],
-        temperature = temperature
-    ).choices[0].message.content.strip()
+        llm_resp = client.chat.completions.create(
+            model=model,
+            messages=[{"role": "user", "content": prompt}],
+            temperature = temperature
+        )
+        llm_resp = llm_resp.choices[0].message.content.strip()
+        return llm_resp
+    except Exception as e:
+        print(llm_resp)
+
+        return f"❌ Erreur lors de l'appel au modèle : {e}."
+
     return llm_resp
 
 def prompt_correction(query, error_msg, full_schema):
@@ -52,18 +60,27 @@ def execute_auto_fixing_sql(query, full_schema, max_attempts=3):
                     )
                     return final_answer
                 else:
-                    pc = prompt_correction(query, error_msg, full_schema)
-                    llm_resp = get_completion(pc, model="gpt-4.1", temperature=0)
-                    sql_match = re.search(r"```sql\s*([\s\S]+?)```", llm_resp, re.IGNORECASE)
-                    if sql_match:
-                        corrected_query = sql_match.group(1).strip()
-                    else:
-                        # Si le LLM ne renvoie pas de bloc SQL, on abandonne
+                    try:
+                        pc = prompt_correction(query, error_msg, full_schema)
+                        llm_resp = get_completion(pc, model="gpt-4.1", temperature=0)
+                        sql_match = re.search(r"```sql\s*([\s\S]+?)```", llm_resp, re.IGNORECASE)
+                        if sql_match:
+                            corrected_query = sql_match.group(1).strip()
+                        else:
+                            # Si le LLM ne renvoie pas de bloc SQL, on abandonne
+                            final_answer = (
+                                "❌ Le modèle n'a pas renvoyé de requête SQL valide en réponse au message d'erreur.\n"
+                                f"Réponse du modèle : {llm_resp}"
+                            )
+                            return final_answer
+                    except Exception as exec_2:
                         final_answer = (
-                            "❌ Le modèle n'a pas renvoyé de requête SQL valide en réponse au message d'erreur.\n"
-                            f"Réponse du modèle : {llm_resp}"
+                            f"❌ Erreur lors de la correction automatique : {exec_2}\n"
+                            f"Requête SQL actuelle :\n```sql\n{corrected_query}\n```"
                         )
-                        break
+                        print(final_answer)
+                        return final_answer
+
 
 #Va définir le prompt qui explique les data disponibles
 def get_schema_description():
