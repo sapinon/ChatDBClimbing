@@ -94,8 +94,9 @@ if st.session_state.page == "welcome":
 
 # ---------------------- PAGE CHATBOT ----------------------
 elif st.session_state.page == "chatbot":
-    if st.session_state.get("reset_main_question", False):
-        st.session_state["reset_main_question"] = False
+    if st.session_state.reset_main_question:
+        st.session_state["main_question"] = ""         # vider le champ
+        st.session_state.reset_main_question = False   # désactiver le drapeau
         st.rerun()
 
     col_empty, col_home = st.columns([10, 1])
@@ -152,9 +153,11 @@ elif st.session_state.page == "chatbot":
     #Traitement de la question
     if submit and question.strip():
         st.session_state["reset_main_question"] = True
+
         st.session_state.first_question_asked = True
 
         current_question = question.strip()
+
         history = st.session_state.chat_history
         result = generate_sql_from_question(current_question, full_schema, history)
 
@@ -215,7 +218,7 @@ elif st.session_state.page == "chatbot":
                 answer = ""
 
         st.session_state.chat_history.append((current_question, answer))
-        #st.session_state["main_question"] = ""
+
         st.rerun()
 
     if st.session_state.show_reasoning and st.session_state.last_reasoning:
